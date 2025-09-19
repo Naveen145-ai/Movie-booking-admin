@@ -1,12 +1,18 @@
 :root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
-
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
-
+  color-scheme: dark;
+  --bg: #0f0f12;
+  --panel: #1a1a1f;
+  --panel-2: #22222a;
+  --text: #e6e6ea;
+  --muted: #a3a3ad;
+  --accent: #ff4d6d;
+  --accent-2: #b8325d;
+  --border: #2b2b34;
+  color: var(--text);
+  background-color: var(--bg);
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
@@ -15,54 +21,168 @@
 
 a {
   font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
+  color: var(--text);
+  text-decoration: none;
 }
+
 a:hover {
-  color: #535bf2;
+  color: var(--accent);
 }
 
 body {
   margin: 0;
-  display: flex;
-  place-items: center;
   min-width: 320px;
   min-height: 100vh;
+  background: radial-gradient(1200px 600px at -10% -10%, #1a1a1f, transparent),
+    radial-gradient(1000px 500px at 110% -10%, #201922, transparent),
+    var(--bg);
 }
 
 h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
+  font-size: 2rem;
+  line-height: 1.2;
+  margin: 0;
 }
 
 button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  padding: 0.7em 1.2em;
+  font-size: 0.95rem;
+  font-weight: 600;
   font-family: inherit;
-  background-color: #1a1a1a;
+  background: linear-gradient(180deg, var(--panel), var(--panel-2));
+  color: var(--text);
   cursor: pointer;
-  transition: border-color 0.25s;
-}
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.25s;
 }
 
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
-  }
+button:hover {
+  border-color: var(--accent);
+  box-shadow: 0 6px 16px rgba(255, 77, 109, 0.15);
+  transform: translateY(-1px);
 }
+
+button:focus,
+button:focus-visible {
+  outline: 2px solid var(--accent);
+}
+
+/* Utility classes for admin layout */
+.container {
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  min-height: 100vh;
+}
+
+.sidebar {
+  background: linear-gradient(180deg, #17171b, #121216);
+  border-right: 1px solid var(--border);
+  padding: 24px 16px;
+}
+
+.main {
+  padding: 24px 28px;
+}
+
+.brand {
+  font-size: 1.3rem;
+  font-weight: 800;
+  color: #ff596d;
+}
+
+.nav-section {
+  margin-top: 18px;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  margin: 6px 0;
+  border-radius: 10px;
+  color: var(--text);
+  border: 1px solid transparent;
+}
+
+.nav-item.active, .nav-item:hover {
+  background: rgba(255, 77, 109, 0.1);
+  border-color: rgba(255, 77, 109, 0.25);
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.stat-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+  margin-top: 16px;
+}
+
+.stat-card {
+  background: linear-gradient(180deg, var(--panel), var(--panel-2));
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 16px;
+}
+
+.stat-title {
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+.stat-value {
+  margin-top: 8px;
+  font-size: 1.4rem;
+  font-weight: 800;
+}
+
+.section-title {
+  margin: 24px 0 12px;
+}
+
+.cards-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.show-card {
+  background: linear-gradient(180deg, var(--panel), var(--panel-2));
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  overflow: hidden;
+}
+
+.show-thumb {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  display: block;
+}
+
+.show-body { padding: 12px 14px; }
+
+.muted { color: var(--muted); font-size: 0.85rem; }
+
+/* Form controls */
+.input {
+  height: 42px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: #121216;
+  color: var(--text);
+  padding: 0 12px;
+  outline: none;
+  transition: border-color .2s ease, box-shadow .2s ease;
+}
+.input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(255,77,109,.15);
+}
+input[type="datetime-local"].input { padding: 0 10px; height: 42px; }
