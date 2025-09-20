@@ -1,15 +1,22 @@
+import { useEffect, useState } from 'react'
+import api from '../services/api'
+
 export default function ListBookings(){
-  const rows = [
-    { user: 'Great Stack', title: 'K.O.', time: 'Mon, November 10 at 5:30 PM', seats: 'A1, A2', amount: 46 },
-    { user: 'Great Stack', title: 'The Accountant*', time: 'Tue, June 1 at 8:15 PM', seats: 'C1, C2', amount: 38 },
-    { user: 'Great Stack', title: 'A Minecraft Movie', time: 'Tue, June 1 at 1:38 AM', seats: 'G1, G2, G3, G4', amount: 190 },
-    { user: 'Great Stack', title: 'A Minecraft Movie', time: 'Tue, June 1 at 3:58 AM', seats: 'E1, E2', amount: 95 },
-    { user: 'Great Stack', title: 'Sinners', time: 'Sun, June 7 at 8:51 PM', seats: 'C5, C6, C7', amount: 88 },
-  ]
+  const [rows, setRows] = useState([])
+  const [error, setError] = useState('')
+
+  useEffect(()=>{
+    let ignore=false
+    api.listBookings()
+      .then(data=> { if(!ignore) setRows(Array.isArray(data)? data:[]) })
+      .catch(e=> { if(!ignore) setError(e.message||'Failed to load') })
+    return ()=> { ignore = true }
+  },[])
 
   return (
     <div>
       <h1>List <span style={{color:'var(--accent)'}}>Bookings</span></h1>
+      {error && <div className="muted" style={{color:'salmon',marginTop:8}}>Error: {error}</div>}
       <div className="stat-card" style={{marginTop:16,overflow:'auto'}}>
         <table className="table">
           <thead>
@@ -20,15 +27,18 @@ export default function ListBookings(){
             </tr>
           </thead>
           <tbody>
-            {rows.map((r,i)=> (
-              <tr key={i}>
-                <td>{r.user}</td>
-                <td>{r.title}</td>
-                <td>{r.time}</td>
-                <td>{r.seats}</td>
-                <td>${r.amount}</td>
-              </tr>
-            ))}
+            {rows.map((r,i)=> {
+              const seats = Array.isArray(r.seats)? r.seats.join(', '): r.seats
+              return (
+                <tr key={r._id || i}>
+                  <td>{r.userEmail || r.user || '—'}</td>
+                  <td>{r.movieTitle || r.title}</td>
+                  <td>{r.showTime || r.time}</td>
+                  <td>{seats}</td>
+                  <td>${r.totalPrice ?? r.amount ?? 0}</td>
+                </tr>
+              )
+            })}
           </tbody>
         </table>
       </div>

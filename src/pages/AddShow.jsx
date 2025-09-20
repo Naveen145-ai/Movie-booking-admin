@@ -5,6 +5,8 @@ import api from '../services/api'
 export default function AddShow() {
   const navigate = useNavigate()
   const [form, setForm] = useState({ title: '', poster: '', price: '', rating: '', datetime: '' })
+  const [times, setTimes] = useState([])
+  const [selectedIdx, setSelectedIdx] = useState(-1)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
 
@@ -28,7 +30,7 @@ export default function AddShow() {
         poster: form.poster,
         price: Number(form.price),
         rating: Number(form.rating),
-        datetime: form.datetime,
+        times: times,
       })
       navigate('/list-shows')
     } catch (err) {
@@ -46,7 +48,8 @@ export default function AddShow() {
       <div className="section-title">Now Playing Movies</div>
       <div style={{display:'flex',gap:14,overflowX:'auto',paddingBottom:6}}>
         {nowPlaying.map((m,i)=> (
-          <div key={i} style={{minWidth:180,background:'linear-gradient(180deg, var(--panel), var(--panel-2))',border:'1px solid var(--border)',borderRadius:12,overflow:'hidden'}}>
+          <div key={i} onClick={()=> { setSelectedIdx(i); setForm(f=>({...f, title:m.title, poster:m.poster, rating:m.rating})) }}
+            style={{minWidth:180,cursor:'pointer',outline:selectedIdx===i? '2px solid var(--accent)':'none',background:'linear-gradient(180deg, var(--panel), var(--panel-2))',border:'1px solid var(--border)',borderRadius:12,overflow:'hidden'}}>
             <img src={m.poster} alt={m.title} style={{width:180,height:240,objectFit:'cover',display:'block'}} />
             <div style={{padding:'10px 12px'}}>
               <div style={{fontWeight:700,whiteSpace:'nowrap',overflow:'hidden',textOverflow:'ellipsis'}}>{m.title}</div>
@@ -73,16 +76,32 @@ export default function AddShow() {
           <div style={{display:'grid',gap:6}}>
             <label className="muted">Select Date and Time</label>
             <div style={{display:'flex',gap:10,alignItems:'center'}}>
-              <input className="input" style={{flex:1}} name="datetime" value={form.datetime} onChange={onChange} type="datetime-local" placeholder="dd-mm-yyyy --:--" required />
-              <button type="button">Add Time</button>
+              <input className="input" style={{flex:1}} name="datetime" value={form.datetime} onChange={onChange} type="datetime-local" placeholder="dd-mm-yyyy --:--" />
+              <button type="button" onClick={()=> {
+                if(form.datetime){ setTimes(t=> Array.from(new Set([...t, form.datetime]))); setForm(f=>({...f, datetime:''})) }
+              }}>Add Time</button>
             </div>
+            {times.length>0 && (
+              <div style={{display:'flex',gap:8,flexWrap:'wrap',marginTop:8}}>
+                {times.map((t,i)=> (
+                  <span key={i} style={{padding:'6px 10px',border:'1px solid var(--border)',borderRadius:8,background:'#121216',display:'inline-flex',alignItems:'center',gap:8}}>
+                    {new Date(t).toLocaleString()}
+                    <button type="button" style={{padding:'2px 6px'}} onClick={()=> setTimes(prev=> prev.filter((_,idx)=> idx!==i))}>x</button>
+                  </span>
+                ))}
+              </div>
+            )}
           </div>
 
-          {/* Hidden fields to enable API post like original */}
-          <div style={{display:'none'}}>
-            <input className="input" name="title" value={form.title} onChange={onChange} placeholder="Title" />
-            <input className="input" name="poster" value={form.poster} onChange={onChange} placeholder="Poster" />
-            <input className="input" name="rating" value={form.rating} onChange={onChange} placeholder="Rating" />
+          <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:12}}>
+            <div>
+              <label className="muted">Title</label>
+              <input className="input" name="title" value={form.title} onChange={onChange} placeholder="Select a movie or type title" />
+            </div>
+            <div>
+              <label className="muted">Poster URL</label>
+              <input className="input" name="poster" value={form.poster} onChange={onChange} placeholder="https://..." />
+            </div>
           </div>
 
           <div style={{display:'flex',gap:10,marginTop:6}}>

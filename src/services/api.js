@@ -23,7 +23,7 @@ export const api = {
   // Movies
   listMovies: () => request('/api/admin/movies'),
   // Bookings
-  listBookings: () => request('/api/admin/bookings'),
+  listBookings: () => request('/api/bookings/getBook'),
   // Stats
   stats: () => request('/api/admin/stats'),
 }
