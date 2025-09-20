@@ -5,7 +5,6 @@ export default function Sidebar() {
     { to: '/', label: 'Dashboard', icon: '🏠' },
     { to: '/add-show', label: 'Add Shows', icon: '➕' },
     { to: '/list-shows', label: 'List Shows', icon: '🎬' },
-    { to: '/list-movies', label: 'List Movies', icon: '📽️' },
     { to: '/list-bookings', label: 'List Bookings', icon: '📒' },
   ]
 
@@ -34,3 +33,4 @@ export default function Sidebar() {
     </aside>
   )
 }
+

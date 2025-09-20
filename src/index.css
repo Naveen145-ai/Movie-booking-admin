@@ -186,3 +186,28 @@ button:focus-visible {
   box-shadow: 0 0 0 3px rgba(255,77,109,.15);
 }
 input[type="datetime-local"].input { padding: 0 10px; height: 42px; }
+
+/* Tables */
+.table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  font-size: 0.95rem;
+}
+.table thead tr {
+  background: linear-gradient(180deg, rgba(255,77,109,.15), rgba(184,50,93,.15));
+}
+.table th,
+.table td {
+  text-align: left;
+  padding: 12px 10px;
+  border-bottom: 1px solid var(--border);
+}
+.table thead th {
+  color: var(--text);
+  font-weight: 600;
+}
+.table thead th:first-child { border-top-left-radius: 10px; }
+.table thead th:last-child { border-top-right-radius: 10px; }
+.table tbody tr:nth-child(even) { background: rgba(255,77,109,0.05); }
+.table tbody tr:hover { background: rgba(255,77,109,0.08); }
